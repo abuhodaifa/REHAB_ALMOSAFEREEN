@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تقييم رحاب المسافرين - نسخة الأيفون</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d2c4d;
+            --accent: #d9822b;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Tajawal', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0d2c4d 0%, #1a3c61 50%, #0d2c4d 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* --- الجزيئات المتحركة --- */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .dot {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(100vh);
+                opacity: 0.8;
+            }
+
+            to {
+                transform: translateY(-10vh);
+                opacity: 0;
+            }
+        }
+
+        /* --- الطائرة --- */
+        .plane {
+            position: fixed;
+            top: 15%;
+            left: -100px;
+            font-size: 35px;
+            color: rgba(255, 255, 255, 0.3);
+            z-index: 2;
+            animation: fly 15s linear infinite;
+        }
+
+        @keyframes fly {
+            0% {
+                left: -100px;
+                top: 15%;
+                transform: rotate(15deg);
+            }
+
+            50% {
+                top: 25%;
+            }
+
+            100% {
+                left: 110%;
+                top: 10%;
+                transform: rotate(5deg);
+            }
+        }
+
+        /* --- الحاوية --- */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 15px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(12px) saturate(140%);
+            backdrop-filter: blur(12px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            width: 100%;
+            max-width: 420px;
+            padding: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            margin: 5px 0;
+            font-weight: 900;
+        }
+
+        .header p {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            text-align: right;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-family: 'Tajawal';
+            font-size: 16px;
+            margin-bottom: 15px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .rating-grid {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .rating-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .rating-box input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .box-label {
+            padding: 10px 5px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13px;
+            transition: 0.3s;
+            color: white;
+        }
+
+        input[value="ممتاز"]:checked+.box-label {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+
+        input[value="جيد"]:checked+.box-label {
+            background: #f1c40f;
+            color: #000;
+            border-color: #f1c40f;
+        }
+
+        input[value="ضعيف"]:checked+.box-label {
+            background: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .btn-wa {
+            width: 100%;
+            padding: 16px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-wa:active {
+            transform: scale(0.96);
+        }
+
+        .footer {
+            font-size: 11px;
+            margin-top: 15px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="particles"></div>
+    <div class="plane"><i class="fas fa-plane"></i></div>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="header">
+                <div style="font-size: 45px; font-weight: 900;">R</div>
+                <h1>رحاب المسافرين للسياحة</h1>
+                <p>REHAB ALMOSAFEREEN TRAVEL</p>
+            </div>
+
+            <form id="surveyForm">
+                <label>اسم المندوب:</label>
+                <select id="agent" required>
+                    <option value="" disabled selected>-- اختر المندوب --</option>
+                    <option value="عبد الرحمن">عبد الرحمن</option>
+                    <option value="أيمن">أيمن</option>
+                    <option value="محمد">محمد</option>
+                    <option value="يوسف">يوسف</option>
+                    <option value="مهدي">مهدي</option>
+                    <option value="أنيس">أنيس</option>
+                    <option value="عبد المعطي">عبد المعطي</option>
+                    <option value="أسعد">أسعد</option>
+                </select>
+
+                <label>تقييم سرعة الرد:</label>
+                <div class="rating-grid">
+                    <div class="rating-box">
+                        <input type="radio" name="speed" value="ممتاز" required>
+                        <div class="box-label">ممتاز</div>
+                    </div>
+                    <div class="rating-box">
+                        <input type="radio" name="speed" value="جيد">
+                        <div class="box-label">جيد</div>
+                    </div>
+                    <div class="rating-box">
+                        <input type="radio" name="speed" value="ضعيف">
+                        <div class="box-label">ضعيف</div>
+                    </div>
+                </div>
+
+                <label>تقييم حسن المعاملة:</label>
+                <div class="rating-grid">
+                    <div class="rating-box">
+                        <input type="radio" name="treat" value="ممتاز" required>
+                        <div class="box-label">ممتاز</div>
+                    </div>
+                    <div class="rating-box">
+                        <input type="radio" name="treat" value="جيد">
+                        <div class="box-label">جيد</div>
+                    </div>
+                    <div class="rating-box">
+                        <input type="radio" name="treat" value="ضعيف">
+                        <div class="box-label">ضعيف</div>
+                    </div>
+                </div>
+
+                <label>ملاحظات إضافية:</label>
+                <textarea id="notes" rows="2" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+
+                <button type="submit" class="btn-wa">
+                    <i class="fab fa-whatsapp"></i> إرسال التقييم
+                </button>
+            </form>
+
+            <div class="footer">شكراً لتقييمكم &copy; 2024</div>
+        </div>
+    </div>
+
+    <script>
+        // الجزيئات
+        const partCont = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const d = document.createElement('div');
+            d.className = 'dot';
+            d.style.width = d.style.height = (Math.random() * 4 + 2) + 'px';
+            d.style.left = (Math.random() * 100) + 'vw';
+            d.style.animationDuration = (Math.random() * 8 + 4) + 's';
+            d.style.animationDelay = (Math.random() * 5) + 's';
+            partCont.appendChild(d);
+        }
+
+        // إرسال واتساب (محسن)
+        document.getElementById('surveyForm').onsubmit = function (e) {
+            e.preventDefault();
+
+            const agent = document.getElementById('agent').value;
+            const speed = document.querySelector('input[name="speed"]:checked')?.value;
+            const treat = document.querySelector('input[name="treat"]:checked')?.value;
+            const notes = document.getElementById('notes').value || "لا توجد";
+
+            if (!agent || !speed || !treat) {
+                alert("الرجاء تعبئة جميع الحقول");
+                return;
+            }
+
+            const phone = "218914753560";
+
+            const message = `✨ تقييم أداء مندوب - رحاب المسافرين ✨
+
+👤 المندوب: ${agent}
+⚡ سرعة الرد: ${speed}
+🤝 حسن المعاملة: ${treat}
+📝 الملاحظات: ${notes}`;
+
+            const encodedMessage = encodeURIComponent(message);
+
+            alert("سيتم تحويلك إلى واتساب لإرسال التقييم");
+
+            window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_self');
+
+            // fallback للأيفون
+            setTimeout(() => {
+                window.location.href = `whatsapp://send?phone=${phone}&text=${encodedMessage}`;
+            }, 500);
+        };
+    </script>
+
+</body>
+
+</html>
